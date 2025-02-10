@@ -2,22 +2,39 @@
 # frozen_string_literal: true
 
 class LocalSherpa < Formula
-  desc "???"
-  homepage "https://github.com/nomadsherpa/local_sherpa"
-  url "https://github.com/nomadsherpa/local_sherpa/releases/download/test/Archive.zip"
-  sha256 "d37c7dc325cda6cd28617a9924c842bd0a4bd41d0ab585995a255860e8279b1d"
-  version "1.0.0-beta.1"
+  desc "Define folder specific aliases, functions and variables in your shell"
+  homepage "https://github.com/SherpaLabsIO/local_sherpa"
+  url "https://github.com/sherpalabsio/local_sherpa/releases/download/v0.1.0/local_sherpa_0.1.0.tar.gz"
+  sha256 "c41615cf5efe0829d22faad257da2976598c1e646ff57a39e5d7354517b0ace7"
+
+  depends_on "bash"
 
   def install
-    #   bin.install "#{buildpath}/bin/skhd"
+    libexec.install Dir["*"]
+    bin.install_symlink libexec / "init" => "local_sherpa_init"
   end
 
-  def caveats
-    "caveats??"
+  def post_install
+    shell = ENV["SHELL"].split("/").last
+
+    unless %w[zsh bash].include?(shell)
+      puts <<~CAVEATS
+        Local Sherpa only supports Zsh and Bash. It seems that you are using #{shell}.
+      CAVEATS
+      return
+    end
+
+    ohai "Post install notes"
+
+    puts <<~CAVEATS
+      Don't forget to add the following line to your ~/.#{shell}rc file:
+      eval "$(local_sherpa_init)"
+      or run the following command:
+      echo 'eval "$(local_sherpa_init)"' >> ~/.#{shell}rc
+    CAVEATS
   end
 
-  # test do
-  # TODO
-  # assert_equal "1.0.0-beta.1", shell_output("#{bin}/sherpa -v").strip
-  # end
+  test do
+    assert_match version.to_s, shell_output("#{ENV["SHELL"]} -c 'eval $(local_sherpa_init) && sherpa -v'")
+  end
 end
