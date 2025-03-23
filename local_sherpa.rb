@@ -5,7 +5,7 @@ class LocalSherpa < Formula
   desc "Define folder specific aliases, functions and variables in your shell"
   homepage "https://github.com/SherpaLabsIO/local_sherpa"
   url "https://github.com/sherpalabsio/local_sherpa/releases/download/v0.1.1/local_sherpa_0.1.1.tar.gz"
-  sha256 "500e230a472dd0db1e24ec53ebeea58256d6cac2a7cbd4e9645825517d3740a4"
+  sha256 "70d6c83180ba325cf6ec3000be449f9cc239e70e52d60789912c95d1b5a74e21"
   head "https://github.com/SherpaLabsIO/local_sherpa.git", branch: "main"
 
   depends_on "bash"
