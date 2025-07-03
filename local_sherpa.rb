@@ -14,22 +14,21 @@ class LocalSherpa < Formula
   end
 
   def post_install
-    shell = ENV["SHELL"].split("/").last
-
-    unless %w[zsh bash].include?(shell)
-      puts <<~CAVEATS
-        Local Sherpa only supports Zsh and Bash. It seems that you are using #{shell}.
-      CAVEATS
-      return
-    end
-
     ohai "Post install notes"
 
+    shell = ENV["SHELL"].split("/").last
+    rc_file = File.join(Dir.home, ".#{shell}rc")
+
+    line = 'eval "$(local_sherpa_init)"'
+
+    return if File.readlines(rc_file).any? { |l| l.include?(line) }
+
+    File.open(rc_file, "a") { |f| f.puts line }
+
     puts <<~CAVEATS
-      Don't forget to add the following line to your ~/.#{shell}rc file:
-      eval "$(local_sherpa_init)"
-      or run the following command:
-      echo 'eval "$(local_sherpa_init)"' >> ~/.#{shell}rc
+      Added the following line to your ~/.#{shell}rc file:
+        #{line}
+      Don't forget to restart your shell.
     CAVEATS
   end
 
