@@ -8,8 +8,6 @@ class LocalSherpa < Formula
   sha256 "70d6c83180ba325cf6ec3000be449f9cc239e70e52d60789912c95d1b5a74e21"
   head "https://github.com/SherpaLabsIO/local_sherpa.git", branch: "main"
 
-  depends_on "bash"
-
   def install
     libexec.install Dir["*"]
     bin.install_symlink libexec / "init" => "local_sherpa_init"
